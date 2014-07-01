@@ -1,0 +1,24 @@
+{
+  "name": "skynet-insteon",
+  "version": "0.1.0",
+  "description": "Skynet gateway plugin to control Insteon hub and devices",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/monteslu/skynet-insteon.git"
+  },
+  "keywords": [
+    "skynet-plugin"
+  ],
+  "author": "Matthew Shepard",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/monteslu/skynet-insteon/issues"
+  },
+  "dependencies": {
+    "home-controller": "https://github.com/automategreen/home-controller.git#32c7e2762f5cb30e6c8085c3f01925e2d1f2721a"
+  }
+}
