@@ -1,4 +1,29 @@
+var cheerio = require('cheerio');
+var request = require('request');
 var Insteon = require('home-controller').Insteon;
+var url = require('url');
+
+function getDefaultOptions(callback){
+  request('http://connect.insteon.com/getinfo.asp', function (error, response, body) {
+    if (!error && response.statusCode == 200) {
+      // console.log(body);
+      try{
+        $ = cheerio.load(body);
+        var insteonAddress = url.parse($("strong a").attr("href"));
+        if(insteonAddress.hostname){
+          console.log("Found: ", insteonAddress.hostname);
+          callback(null, {ipAddress: insteonAddress.hostname, portNumber: 9761});
+        }else{
+          callback("No hub found");
+          console.log("No hub found");
+        }
+      }catch(err){
+        console.log("Error", error);
+        callback(err);
+      }
+    }
+  });
+}
 
 function Plugin(messenger, options){
   this.messenger = messenger;
@@ -75,5 +100,6 @@ Plugin.prototype.destroy = function(){
 module.exports = {
   Plugin: Plugin,
   optionsSchema: optionsSchema,
-  messageSchema: messageSchema
+  messageSchema: messageSchema,
+  getDefaultOptions: getDefaultOptions
 };
