@@ -30,6 +30,10 @@ var messageSchema = {
     deviceId: {
       type: 'string',
       required: true
+    },
+    brightness: {
+      type: 'number',
+      required: false
     }
   }
 };
@@ -39,6 +43,7 @@ Plugin.prototype.onMessage = function(data, cb){
   var gateway = new Insteon();
   var port = payload.portNumber || 9761;
   var opts = this.options;
+  var brightness = payload.brightness || 100;
   gateway.once('close', function(){
     cb();
   });
@@ -47,7 +52,7 @@ Plugin.prototype.onMessage = function(data, cb){
     gateway.connect(opts.ipAddress, opts.portNumber, function(){
       if(payload.on){
         gateway.light(payload.deviceId)
-               .turnOn(100)
+               .turnOn(brightness)
                .then(function(){
           gateway.close();
         }, cb);
