@@ -69,33 +69,26 @@ Plugin.prototype.onMessage = function(data, cb){
   var port = payload.portNumber || 9761;
   var opts = this.options;
   var brightness = payload.brightness || 100;
-  gateway.once('close', function(){
-    cb();
-  });
+  gateway.once('close', cb);
   gateway.once('error', cb);
-  if(payload !== undefined && typeof payload.on === 'boolean'){
-    gateway.connect(opts.ipAddress, opts.portNumber, function(){
-      if(payload.on){
-        gateway.light(payload.deviceId)
-               .turnOn(brightness)
-               .then(function(){
-          gateway.close();
-        }, cb);
-      }else{
-        gateway.light(payload.deviceId)
-               .turnOff()
-               .then(function(){
-          gateway.close();
-        }, cb);
-      }
-    });
+  if(!payload || typeof payload.on !== 'boolean'){
+    return;
   }
+  function closeGateway(){
+    gateway.close();
+  }
+  gateway.connect(opts.ipAddress, opts.portNumber, function(){
+    var light = gateway.light(payload.deviceId)
+    if(payload.on){
+      return light.turnOn(brightness).then(closeGateway, cb);
+    }
+    light.turnOff().then(closeGateway, cb);
+  });
 };
 
 Plugin.prototype.destroy = function(){
   //clean up
 };
-
 
 module.exports = {
   Plugin: Plugin,

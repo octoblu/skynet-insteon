@@ -19,8 +19,8 @@
     "url": "https://github.com/monteslu/skynet-insteon/issues"
   },
   "dependencies": {
-    "home-controller": "git://github.com/automategreen/home-controller.git#32c7e2762f5cb30e6c8085c3f01925e2d1f2721a",
-    "request": "~2.36.0",
-    "cheerio": "~0.17.0"
+    "cheerio": "~0.17.0",
+    "home-controller": "^0.6.0",
+    "request": "~2.36.0"
   }
 }
